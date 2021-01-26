@@ -1,14 +1,14 @@
 defmodule Keycloak.Plug.VerifySession do
   @moduledoc """
   Plug for verifying authorization on a per request basis, verifies that a token is set in the
-  `Authorization` header.
+  session with key token.
 
   ### Example Usage
 
-      config :keycloak, Keycloak.Plug.VerifyToken, hmac: "foo"
+      config :keycloak, Keycloak.Plug.VerifySession, hmac: "foo"
 
       # In your plug pipeline
-      plug Keycloak.Plug.VerifyToken
+      plug Keycloak.Plug.VerifySession
   """
   use Joken.Config
 
