@@ -30,6 +30,7 @@ defmodule Keycloak.Plug.VerifySession do
   def call(conn, _) do
     token =
       conn
+      |> fetch_session
       |> get_session(:token)
 
     case verify_token(token.access_token) do
