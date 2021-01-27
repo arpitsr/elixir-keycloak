@@ -113,6 +113,7 @@ defmodule Keycloak.Plug.VerifySession do
       |> Application.get_env(__MODULE__, [])
       |> Keyword.split([:hmac, :public_key])
 
+    IO.inspect(config)
     case config do
       [hmac: hmac] ->
         hmac
