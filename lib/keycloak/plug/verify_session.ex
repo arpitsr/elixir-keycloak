@@ -123,6 +123,7 @@ defmodule Keycloak.Plug.VerifySession do
       [public_key: public_key] ->
         public_key
         |> JWK.from_pem()
+        |> JWK.to_map
         |> (&Joken.Signer.create("RS256", &1)).()
 
       _ ->
