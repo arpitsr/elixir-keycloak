@@ -106,6 +106,8 @@ defmodule Keycloak.Plug.VerifySession do
   """
   @spec signer_key() :: Joken.Signer.t()
   def signer_key() do
+    IO.inspect(__MODULE__)
+    IO.inspect(Application.get_env(:keycloak, __MODULE__, []))
     {config, _} =
       :keycloak
       |> Application.get_env(__MODULE__, [])
