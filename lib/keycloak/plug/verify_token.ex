@@ -33,7 +33,7 @@ defmodule Keycloak.Plug.VerifyToken do
       |> fetch_session
       |> get_session(:token)
 
-    case verify_token(token) do
+    case verify_token(token.access_token) do
       {:ok, claims} ->
         conn
         |> assign(:claims, claims)
