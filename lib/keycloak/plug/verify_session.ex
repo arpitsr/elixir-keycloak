@@ -32,7 +32,8 @@ defmodule Keycloak.Plug.VerifySession do
       conn
       |> fetch_session
       |> get_session(:token)
-
+    IO.inspect(token)
+    IO.inspect(token.access_token)
     case verify_token(token.access_token) do
       {:ok, claims} ->
         conn
