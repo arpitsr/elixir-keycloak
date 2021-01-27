@@ -29,9 +29,9 @@ defmodule Keycloak.Plug.VerifyToken do
   @spec call(Plug.Conn.t(), keyword()) :: Plug.Conn.t()
   def call(conn, _) do
     token =
-      conn
-      |> get_req_header("authorization")
-      |> fetch_token()
+     conn
+      |> fetch_session
+      |> get_session(:token)
 
     case verify_token(token) do
       {:ok, claims} ->
