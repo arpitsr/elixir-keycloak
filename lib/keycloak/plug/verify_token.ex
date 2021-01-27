@@ -2,11 +2,8 @@ defmodule Keycloak.Plug.VerifyToken do
   @moduledoc """
   Plug for verifying authorization on a per request basis, verifies that a token is set in the
   `Authorization` header.
-
   ### Example Usage
-
       config :keycloak, Keycloak.Plug.VerifyToken, hmac: "foo"
-
       # In your plug pipeline
       plug Keycloak.Plug.VerifyToken
   """
@@ -29,11 +26,11 @@ defmodule Keycloak.Plug.VerifyToken do
   @spec call(Plug.Conn.t(), keyword()) :: Plug.Conn.t()
   def call(conn, _) do
     token =
-     conn
-      |> fetch_session
-      |> get_session(:token)
+      conn
+      |> get_req_header("authorization")
+      |> fetch_token()
 
-    case verify_token(token.access_token) do
+    case verify_token(token) do
       {:ok, claims} ->
         conn
         |> assign(:claims, claims)
@@ -51,12 +48,9 @@ defmodule Keycloak.Plug.VerifyToken do
 
   @doc """
   Attemps to verify that the passed `token` can be trusted.
-
   ## Example
-
       iex> verify_token(nil)
       {:error, :not_authenticated}
-
       iex> verify_token("abc123")
       {:error, :signature_error}
   """
@@ -70,15 +64,11 @@ defmodule Keycloak.Plug.VerifyToken do
   @doc """
   Fetches the token from the `Authorization` headers array, attempting
   to match the token in the format `Bearer <token>`.
-
   ### Example
-
       iex> fetch_token([])
       nil
-
       iex> fetch_token(["abc123"])
       nil
-
       iex> fetch_token(["Bearer abc123"])
       "abc123"
   """
@@ -94,9 +84,7 @@ defmodule Keycloak.Plug.VerifyToken do
 
   @doc """
   Returns the configured `public_key` or `hmac` key used to sign the token.
-
   ### Example
-
       iex> %Joken.Signer{} = signer_key()
       %Joken.Signer{
               alg: "HS512",
